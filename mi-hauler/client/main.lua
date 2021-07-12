@@ -123,25 +123,24 @@ end
 
 
 Citizen.CreateThread(function()
-    local ped = PlayerPedId()
     while true do 
         if isLoggedIn and PlayerJob.name == "hauler" then
-
-            local pos = GetEntityCoords(PlayerPedId())
+            local ped = PlayerPedId()
+            local pos = GetEntityCoords(ped)
 
             if #(pos - vector3(Config.Locations["vehicle"].coords.x, Config.Locations["vehicle"].coords.y, Config.Locations["vehicle"].coords.z)) < 30.0 then
                 DrawMarker(2, Config.Locations["vehicle"].coords.x, Config.Locations["vehicle"].coords.y, Config.Locations["vehicle"].coords.z - 0.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.4, 0.4, 0.2, 255, 255, 255, 255, 0, 0, 0, 1, 0, 0, 0)
                 if #(pos - vector3(Config.Locations["vehicle"].coords.x, Config.Locations["vehicle"].coords.y, Config.Locations["vehicle"].coords.z)) < 1.5 then
 
-                    if IsPedInAnyVehicle(PlayerPedId(), false) then
+                    if IsPedInAnyVehicle(ped, false) then
                         DrawText3D(Config.Locations["vehicle"].coords.x, Config.Locations["vehicle"].coords.y, Config.Locations["vehicle"].coords.z, "~g~E~w~ - Store The Vehicle")
                     else
                         DrawText3D(Config.Locations["vehicle"].coords.x, Config.Locations["vehicle"].coords.y, Config.Locations["vehicle"].coords.z, "~g~E~w~ - Vehicle")
                     end
 
                     if IsControlJustReleased(0, 38) then
-                        if IsPedInAnyVehicle(PlayerPedId(), false) then
-                            DeleteVehicle(GetVehiclePedIsIn(PlayerPedId()))
+                        if IsPedInAnyVehicle(ped, false) then
+                            DeleteVehicle(GetVehiclePedIsIn(ped))
                             TriggerServerEvent('mi-hauler:server:DoBail', false)
                         else
                             TriggerServerEvent('mi-hauler:server:DoBail', true)
@@ -195,7 +194,7 @@ Citizen.CreateThread(function()
             local vehicle = GetEntityModel(GetVehiclePedIsIn(ped, false))
             if TargetHauler == vehicle then
                 local trailerAttached, trailerModel = GetVehicleTrailerVehicle(GetVehiclePedIsUsing(ped))
-                if trailerAttached and not TargetBlip then
+                if trailerAttached and TargetBlip == nil then
                     TargetBlip = AddBlipForCoord(CurrentLocation.target.x, CurrentLocation.target.y, CurrentLocation.target.z)
                     SetBlipColour(TargetBlip, 3)
                     SetBlipRoute(TargetBlip, true)
@@ -213,17 +212,17 @@ end)
 
 -- Tujuan
 Citizen.CreateThread(function()
-    local ped = PlayerPedId()
     while true do 
         if isLoggedIn and CurrentLocation.target ~= nil then
+            local ped = PlayerPedId()
             local targetLocation = CurrentLocation.target
 
             if PlayerJob.name == "hauler" then
-                local pos = GetEntityCoords(PlayerPedId())
+                local pos = GetEntityCoords(ped)
 
-                if IsPedInAnyVehicle(PlayerPedId(), false) then
+                if IsPedInAnyVehicle(ped, false) then
                     if #(pos - vector3(targetLocation.x, targetLocation.y, targetLocation.z)) < 50.0 then
-                        if not VehicleSpawned and TargetBlip ~= nil then
+                        if TargetBlip ~= nil then
                             RemoveBlip(TargetBlip)
                             TargetBlip = nil
                         end
@@ -232,8 +231,8 @@ Citizen.CreateThread(function()
                         if #(pos - vector3(targetLocation.x, targetLocation.y, targetLocation.z)) < 1.5 then
 
                             if IsControlJustReleased(0, 38) then
-                                if IsPedInAnyVehicle(PlayerPedId(), false) then
-                                    deliveredTrailer(GetVehiclePedIsIn(PlayerPedId()))
+                                if IsPedInAnyVehicle(ped, false) then
+                                    deliveredTrailer(GetVehiclePedIsIn(ped))
                                 end
                             end
 
