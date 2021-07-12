@@ -7,5 +7,6 @@ Hauler Job for QB-Core
 ![Trailer](/images/Screenshot_3.png)
 ![Trailer](/images/Screenshot_4.png)
 ![Trailer](/images/Screenshot_4.png)
-![Store Trailer](/images/Screenshot_5.png)
-![Reward](/images/Screenshot_6.png)
+![Trailer](/images/Screenshot_5.png)
+![Store Trailer](/images/Screenshot_6.png)
+![Rewards](/images/Screenshot_7.png)
